@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarity – Start Your Case</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; padding:0; color:#222; }
+    .container { max-width:760px; margin:0 auto; padding:40px 20px 60px; }
+    h1 { font-size:32px; margin-bottom:10px; line-height:1.2; }
+    h2 { font-size:20px; font-weight:normal; margin-bottom:30px; color:#555; line-height:1.4; }
+    p { margin-bottom:20px; line-height:1.6; }
+    .cta { margin:30px 0; }
+    button { background:#000; color:#fff; padding:12px 20px; border:none; cursor:pointer; font-size:16px; }
+    form { margin-top:40px; display:flex; flex-direction:column; gap:20px; background:#fff; padding:24px; border-radius:12px; }
+    textarea, input { width:100%; padding:12px; font-size:14px; box-sizing:border-box; border:1px solid #ccc; border-radius:8px; }
+    textarea { min-height:110px; resize:vertical; }
+    label { font-weight:bold; margin-bottom:5px; display:block; }
+    .note { background:#fff; border-left:4px solid #000; padding:14px 16px; margin:25px 0; }
+    .small { font-size:14px; color:#666; margin-top:-10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stuck in a situation you can’t make sense of?</h1>
+    <h2>Get a clear breakdown of what’s actually going on — and what to do next.</h2>
+
+    <p><strong>Start with one case, free.</strong><br>
+    If it helps, continue. If not, no pressure.</p>
+
+    <p>This is a structured way to understand what’s really happening and decide what to do next.</p>
+
+    <div class="cta">
+      <button type="button" onclick="document.getElementById('form').scrollIntoView({behavior: 'smooth'})">
+        Start your case
+      </button>
+    </div>
+
+    <form id="form" action="/.netlify/functions/submit-case" method="POST">
+      <div class="note">
+        <strong>The more detail you give, the more accurate and useful your response will be.</strong>
+      </div>
+
+      <div>
+        <label for="current_situation">1. What is the current situation?</label>
+        <textarea id="current_situation" name="current_situation" required placeholder="Please give a bit of detail (2–3 sentences if possible)"></textarea>
+      </div>
+
+      <div>
+        <label for="who_is_involved">2. Who is involved?</label>
+        <textarea id="who_is_involved" name="who_is_involved" required placeholder="Who is doing what, and who is not involved but should be?"></textarea>
+      </div>
+
+      <div>
+        <label for="gaps_or_disagreements">3. Where are the gaps or disagreements?</label>
+        <textarea id="gaps_or_disagreements" name="gaps_or_disagreements" required placeholder="What is not working, or where do people see things differently?"></textarea>
+      </div>
+
+      <div>
+        <label for="person_at_centre_wants">4. What does the person at the centre want?</label>
+        <textarea id="person_at_centre_wants" name="person_at_centre_wants" required placeholder="What have they said directly, or what do they seem to want?"></textarea>
+      </div>
+
+      <div>
+        <label for="pressure_right_now">5. Where is the pressure right now?</label>
+        <textarea id="pressure_right_now" name="pressure_right_now" required placeholder="Who is overwhelmed, or what feels unsustainable?"></textarea>
+      </div>
+
+      <div>
+        <label for="why_not_resolved">6. Why hasn’t this already been resolved?</label>
+        <textarea id="why_not_resolved" name="why_not_resolved" required placeholder="What is stopping the obvious next step?"></textarea>
+      </div>
+
+      <div>
+        <label for="email">Your email</label>
+        <input id="email" type="email" name="email" required placeholder="you@example.com" />
+      </div>
+
+      <p class="small">By submitting, you are asking for one free case response by email.</p>
+
+      <button type="submit">Submit case</button>
+    </form>
+  </div>
+</body>
+</html>
