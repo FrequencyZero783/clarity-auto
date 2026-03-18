@@ -460,16 +460,16 @@
       <p class="eyebrow">Family care coordination</p>
       <h1>When everyone who loves someone<br>is holding a <em>different picture</em></h1>
       <p class="hero-body">
-        When someone in a family needs care — a serious illness, a terminal diagnosis, 
-        a mental health crisis — the coordination burden falls on the people who love them. 
-        Different family members hold different information. Different assumptions about 
+        When someone in a family needs care — a serious illness, a terminal diagnosis,
+        a mental health crisis — the coordination burden falls on the people who love them.
+        Different family members hold different information. Different assumptions about
         what is happening and what to do. No one is working from the same picture.
       </p>
       <div class="explainer">
-        <p>Sameground derives the shared picture. Not a medical care plan — that belongs 
-        to the clinicians. The coordination document that makes it possible for everyone 
+        <p>Sameground derives the shared picture. Not a medical care plan — that belongs
+        to the clinicians. The coordination document that makes it possible for everyone
         who loves this person to act together, from the same ground.</p>
-        <p>You describe the situation. We produce a Care Coordination document — specific 
+        <p>You describe the situation. We produce a Care Coordination document — specific
         to your family, specific to this moment — and send it to you by email within minutes.</p>
       </div>
       <a class="cta-button" href="#form-section">Describe your situation</a>
@@ -495,9 +495,9 @@
     <div class="resources-header">
       <p class="eyebrow">You don't have to navigate this alone</p>
       <h2>Professional support and services</h2>
-      <p>Sameground coordinates the family picture. These organisations provide the 
-      professional care, clinical support, and specialist guidance that sits alongside it. 
-      We point toward them because they are genuinely useful — not as a disclaimer, 
+      <p>Sameground coordinates the family picture. These organisations provide the
+      professional care, clinical support, and specialist guidance that sits alongside it.
+      We point toward them because they are genuinely useful — not as a disclaimer,
       but because coordination works best when you know who else is in the room.</p>
     </div>
 
@@ -621,12 +621,12 @@
       <div class="form-header">
         <p class="eyebrow">Your situation</p>
         <h2>Tell us what is happening</h2>
-        <p>Answer as specifically as you can. The more detail you give, the more useful 
-        the response will be. There are no wrong answers — uncertainty is more useful 
+        <p>Answer as specifically as you can. The more detail you give, the more useful
+        the response will be. There are no wrong answers — uncertainty is more useful
         than false confidence. Use first names or initials only.</p>
       </div>
 
-      <form action="/.netlify/functions/submit-case-background" method="POST" onsubmit="setTimeout(()=>window.location='/thankyou.html',100)">
+      <form action="/.netlify/functions/submit-case" method="POST">
 
         <div class="field">
           <span class="field-number">Question 1</span>
@@ -670,22 +670,30 @@
 
         <div class="field">
           <span class="field-number">Question 6</span>
-          <label for="why_not_resolved">Why hasn't this been resolved already?</label>
-          <p class="field-hint">What is stopping the obvious next step? What has already been tried?</p>
-          <textarea id="why_not_resolved" name="why_not_resolved" required
-            placeholder="If it were simple, you wouldn't be here."></textarea>
+          <label for="what_has_it_cost">What has this situation cost you?</label>
+          <p class="field-hint">Practically, financially, physically, emotionally. Be specific. What have you had to give up, sacrifice, or absorb to keep this going?</p>
+          <textarea id="what_has_it_cost" name="what_has_it_cost" required
+            placeholder="The full cost — not just the obvious parts."></textarea>
+        </div>
+
+        <div class="field">
+          <span class="field-number">Question 7</span>
+          <label for="unsaid_thing">What do you most need someone to understand about this situation — that you haven't been able to explain to anyone yet?</label>
+          <p class="field-hint">The thing that gets lost when you try to describe it. The part that makes this harder than it looks from the outside.</p>
+          <textarea id="unsaid_thing" name="unsaid_thing" required
+            placeholder="Take your time. This is often the most important thing you'll write."></textarea>
         </div>
 
         <div class="field email-field">
           <label for="email">Where should we send your response?</label>
-          <p class="field-hint" style="margin-bottom:12px;">Your Care Coordination document will arrive by email — usually within two minutes.</p>
+          <p class="field-hint" style="margin-bottom:12px;">Your Care Coordination document will arrive by email — usually within a few minutes.</p>
           <input id="email" type="email" name="email" required placeholder="your@email.com" />
         </div>
 
         <div class="disclaimer">
-          <strong>This is not medical advice.</strong> Sameground produces a family coordination 
-          document — not a clinical care plan. For any medical decisions, please consult your GP 
-          or the relevant healthcare professional. For end-of-life situations, a palliative care 
+          <strong>This is not medical advice.</strong> Sameground produces a family coordination
+          document — not a clinical care plan. For any medical decisions, please consult your GP
+          or the relevant healthcare professional. For end-of-life situations, a palliative care
           professional should review any significant care decision before it is acted on.
         </div>
 
@@ -701,7 +709,7 @@
   <footer>
     <a class="footer-logo" href="/">Same<span>ground</span></a>
     <p>A family coordination tool. Not medical advice. Not a replacement for professional care.<br>
-    &copy; © 2026 Sameground.</p>
+    &copy; 2026 Sameground.</p>
   </footer>
 
 </body>
