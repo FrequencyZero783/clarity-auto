@@ -3,83 +3,459 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarity – Start Your Case</title>
+  <title>Sameground — Family Care Coordination</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background:#f7f7f7; margin:0; padding:0; color:#222; }
-    .container { max-width:760px; margin:0 auto; padding:40px 20px 60px; }
-    h1 { font-size:32px; margin-bottom:10px; line-height:1.2; }
-    h2 { font-size:20px; font-weight:normal; margin-bottom:30px; color:#555; line-height:1.4; }
-    p { margin-bottom:20px; line-height:1.6; }
-    .cta { margin:30px 0; }
-    button { background:#000; color:#fff; padding:12px 20px; border:none; cursor:pointer; font-size:16px; }
-    form { margin-top:40px; display:flex; flex-direction:column; gap:20px; background:#fff; padding:24px; border-radius:12px; }
-    textarea, input { width:100%; padding:12px; font-size:14px; box-sizing:border-box; border:1px solid #ccc; border-radius:8px; }
-    textarea { min-height:110px; resize:vertical; }
-    label { font-weight:bold; margin-bottom:5px; display:block; }
-    .note { background:#fff; border-left:4px solid #000; padding:14px 16px; margin:25px 0; }
-    .small { font-size:14px; color:#666; margin-top:-10px; }
+    :root {
+      --cream: #faf8f4;
+      --warm-white: #f5f2ec;
+      --ink: #1a1814;
+      --ink-soft: #3d3a34;
+      --ink-muted: #7a756c;
+      --sage: #7d9e8c;
+      --sage-light: #e8f0eb;
+      --terracotta: #c47a5a;
+      --border: #e2ddd6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Lora', serif;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--sage);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 80px 40px 60px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .hero-body {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      max-width: 580px;
+      margin-bottom: 40px;
+    }
+
+    /* ── WHAT THIS IS ── */
+    .explainer {
+      background: var(--sage-light);
+      border-left: 3px solid var(--sage);
+      padding: 24px 28px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 48px;
+      max-width: 580px;
+    }
+
+    .explainer p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+
+    .explainer p + p {
+      margin-top: 12px;
+    }
+
+    /* ── CTA ── */
+    .cta-button {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 16px 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .cta-button:hover {
+      background: var(--ink-soft);
+      transform: translateY(-1px);
+    }
+
+    .cta-sub {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── FORM SECTION ── */
+    .form-section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 40px 80px;
+    }
+
+    .form-header {
+      margin-bottom: 40px;
+    }
+
+    .form-header h2 {
+      font-family: 'Lora', serif;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .form-header p {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-number {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+    label {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .field-hint {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      margin-top: -2px;
+    }
+
+    textarea, input[type="email"] {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      line-height: 1.6;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    textarea:focus, input[type="email"]:focus {
+      border-color: var(--sage);
+    }
+
+    textarea::placeholder, input::placeholder {
+      color: #b8b3aa;
+      font-weight: 300;
+    }
+
+    /* ── EMAIL FIELD ── */
+    .email-field {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .email-field label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    .disclaimer strong {
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button[type="submit"] {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 18px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      align-self: flex-start;
+    }
+
+    button[type="submit"]:hover {
+      background: var(--ink-soft);
+      transform: translateY(-1px);
+    }
+
+    .submit-note {
+      font-size: 13px;
+      color: var(--ink-muted);
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    /* ── FADE IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * {
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero > *:nth-child(5) { animation-delay: 0.5s; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      header { padding: 24px 20px; }
+      .hero { padding: 52px 20px 40px; }
+      .form-section { padding: 48px 20px 60px; }
+      footer { padding: 24px 20px; }
+      button[type="submit"] { width: 100%; }
+      .cta-button { width: 100%; text-align: center; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Stuck in a situation you can’t make sense of?</h1>
-    <h2>Get a clear breakdown of what’s actually going on — and what to do next.</h2>
 
-    <p><strong>Start with one case, free.</strong><br>
-    If it helps, continue. If not, no pressure.</p>
+  <header>
+    <a class="logo" href="/">Same<span>ground</span></a>
+  </header>
 
-    <p>This is a structured way to understand what’s really happening and decide what to do next.</p>
+  <section class="hero">
+    <p class="eyebrow">Family care coordination</p>
 
-    <div class="cta">
-      <button type="button" onclick="document.getElementById('form').scrollIntoView({behavior: 'smooth'})">
-        Start your case
-      </button>
+    <h1>When everyone who loves someone<br>is holding a <em>different picture</em></h1>
+
+    <p class="hero-body">
+      When someone in a family needs care — a serious illness, a terminal diagnosis, 
+      a mental health crisis — the coordination burden falls on the people who love them. 
+      Different family members hold different information. Different assumptions about 
+      what is happening. Different ideas about what to do. No one is working from 
+      the same picture.
+    </p>
+
+    <div class="explainer">
+      <p>Sameground derives the shared picture. Not a medical care plan — that belongs 
+      to the clinicians. The coordination document that makes it possible for everyone 
+      who loves this person to act together.</p>
+      <p>You describe the situation. We produce a Care Coordination document — specific 
+      to your family, specific to this moment — and send it to you by email within minutes.</p>
     </div>
 
-    <form id="form" action="/.netlify/functions/submit-case" method="POST">
-      <div class="note">
-        <strong>The more detail you give, the more accurate and useful your response will be.</strong>
+    <button class="cta-button" onclick="document.getElementById('form-section').scrollIntoView({behavior: 'smooth'})">
+      Describe your situation
+    </button>
+    <span class="cta-sub">Free. No account needed. Response by email.</span>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="form-section" id="form-section">
+
+    <div class="form-header">
+      <h2>Tell us what is happening</h2>
+      <p>Answer as specifically as you can. The more detail you give, the more useful 
+      the response will be. There are no wrong answers — uncertainty is more useful 
+      than false confidence.</p>
+    </div>
+
+    <form action="/.netlify/functions/submit-case" method="POST">
+
+      <div class="field">
+        <span class="field-number">Question 1</span>
+        <label for="current_situation">What is the current situation?</label>
+        <p class="field-hint">Who needs care? What is their condition or situation? What does daily life look like right now?</p>
+        <textarea id="current_situation" name="current_situation" required
+          placeholder="Describe what is actually happening — not what you wish were happening."></textarea>
       </div>
 
-      <div>
-        <label for="current_situation">1. What is the current situation?</label>
-        <textarea id="current_situation" name="current_situation" required placeholder="Please give a bit of detail (2–3 sentences if possible)"></textarea>
+      <div class="field">
+        <span class="field-number">Question 2</span>
+        <label for="who_is_involved">Who is involved?</label>
+        <p class="field-hint">Name every family member who is part of this — present or absent, helping or not helping. What does each one currently understand about the situation?</p>
+        <textarea id="who_is_involved" name="who_is_involved" required
+          placeholder="Include people who are absent or not helping — their absence matters too."></textarea>
       </div>
 
-      <div>
-        <label for="who_is_involved">2. Who is involved?</label>
-        <textarea id="who_is_involved" name="who_is_involved" required placeholder="Who is doing what, and who is not involved but should be?"></textarea>
+      <div class="field">
+        <span class="field-number">Question 3</span>
+        <label for="gaps_or_disagreements">Where are the gaps and the conflicts?</label>
+        <p class="field-hint">What does one family member know that another doesn't? Where are people pulling in different directions? What is the thing nobody has said out loud yet?</p>
+        <textarea id="gaps_or_disagreements" name="gaps_or_disagreements" required
+          placeholder="The unsaid things are often more important than the said ones."></textarea>
       </div>
 
-      <div>
-        <label for="gaps_or_disagreements">3. Where are the gaps or disagreements?</label>
-        <textarea id="gaps_or_disagreements" name="gaps_or_disagreements" required placeholder="What is not working, or where do people see things differently?"></textarea>
+      <div class="field">
+        <span class="field-number">Question 4</span>
+        <label for="person_at_centre_wants">What does the person at the centre want?</label>
+        <p class="field-hint">Have they been asked directly? What have they said? If they cannot speak for themselves — what do you know about what they would want, and how do you know it?</p>
+        <textarea id="person_at_centre_wants" name="person_at_centre_wants" required
+          placeholder="This is the most important question. Take your time with it."></textarea>
       </div>
 
-      <div>
-        <label for="person_at_centre_wants">4. What does the person at the centre want?</label>
-        <textarea id="person_at_centre_wants" name="person_at_centre_wants" required placeholder="What have they said directly, or what do they seem to want?"></textarea>
+      <div class="field">
+        <span class="field-number">Question 5</span>
+        <label for="pressure_right_now">Where is the pressure right now?</label>
+        <p class="field-hint">Not what you think about it — what it feels like to carry this. Who is overwhelmed? What feels unsustainable?</p>
+        <textarea id="pressure_right_now" name="pressure_right_now" required
+          placeholder="Be honest. The weight of this situation is part of the picture."></textarea>
       </div>
 
-      <div>
-        <label for="pressure_right_now">5. Where is the pressure right now?</label>
-        <textarea id="pressure_right_now" name="pressure_right_now" required placeholder="Who is overwhelmed, or what feels unsustainable?"></textarea>
+      <div class="field">
+        <span class="field-number">Question 6</span>
+        <label for="why_not_resolved">Why hasn't this been resolved already?</label>
+        <p class="field-hint">What is stopping the obvious next step? What has already been tried?</p>
+        <textarea id="why_not_resolved" name="why_not_resolved" required
+          placeholder="If it were simple, you wouldn't be here."></textarea>
       </div>
 
-      <div>
-        <label for="why_not_resolved">6. Why hasn’t this already been resolved?</label>
-        <textarea id="why_not_resolved" name="why_not_resolved" required placeholder="What is stopping the obvious next step?"></textarea>
+      <div class="field email-field">
+        <label for="email">Where should we send your response?</label>
+        <p class="field-hint" style="margin-bottom: 10px;">Your Care Coordination document will be emailed to you within a few minutes.</p>
+        <input id="email" type="email" name="email" required placeholder="your@email.com" />
       </div>
 
-      <div>
-        <label for="email">Your email</label>
-        <input id="email" type="email" name="email" required placeholder="you@example.com" />
+      <div class="disclaimer">
+        <strong>This is not medical advice.</strong> Sameground produces a family coordination 
+        document — not a clinical care plan. For any medical decisions, please consult your GP 
+        or the relevant healthcare professional. For end-of-life situations, a palliative care 
+        professional should review any significant care decision.
       </div>
 
-      <p class="small">By submitting, you are asking for one free case response by email.</p>
+      <div class="submit-wrap">
+        <button type="submit">Send my situation</button>
+        <p class="submit-note">Free. No account. Your response arrives by email — usually within two minutes.</p>
+      </div>
 
-      <button type="submit">Submit case</button>
     </form>
-  </div>
+  </section>
+
+  <footer>
+    <p>Sameground is a family coordination tool. It does not provide medical advice or replace 
+    professional care services. &copy; 2026 Sameground.</p>
+  </footer>
+
 </body>
 </html>
