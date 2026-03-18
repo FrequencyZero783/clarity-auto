@@ -11,6 +11,7 @@ export const handler = async (event, context) => {
   }
 
   try {
+    console.log("Body received:", event.body);
     const params = new URLSearchParams(event.body);
 
     const data = {
