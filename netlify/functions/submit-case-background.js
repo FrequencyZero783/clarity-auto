@@ -1,18 +1,15 @@
 // ============================================================
 // SAMEGROUND — submit-case-background.js
 // Netlify Background Function
-// HESTIA v1 — fully optimised with ENKI principles
-// Claude (Anthropic) backend
+// Uses export default + Request object — per Netlify docs
+// HESTIA v1 fully optimised — ENKI principles embedded
 // ============================================================
 
-export const handler = async (event, context) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method not allowed" };
-  }
+export default async (request, context) => {
 
   try {
-    console.log("Body received:", event.body);
-    const params = new URLSearchParams(event.body);
+    const rawBody = await request.text();
+    const params = new URLSearchParams(rawBody);
 
     const data = {
       current_situation:      params.get("current_situation")      || "",
@@ -25,19 +22,21 @@ export const handler = async (event, context) => {
       email:                  params.get("email")                  || "",
     };
 
+    console.log("HESTIA processing case for:", data.email);
+
     if (!data.email) {
-      return { statusCode: 400, body: "Missing email" };
+      console.log("No email — aborting");
+      return;
     }
 
     const prompt = buildPrompt(data);
     const analysis = await runClaude(prompt);
     await sendEmail(data.email, analysis, data);
 
-    console.log(`Case processed successfully for ${data.email}`);
-    return { statusCode: 200, body: "OK" };
+    console.log("Case complete for:", data.email);
 
   } catch (error) {
-    console.error("Error:", error);
+    console.error("HESTIA error:", error);
 
     try {
       const apiKey = process.env.RESEND_API_KEY;
@@ -47,27 +46,19 @@ export const handler = async (event, context) => {
         await sendOne(apiKey, {
           from,
           to: [owner],
-          subject: "Sameground — case processing failed",
+          subject: "Sameground — case failed",
           html: `<p>Error: ${escapeHtml(String(error))}</p>`
         });
       }
     } catch(e) {
-      console.error("Could not send error notification:", e);
+      console.error("Could not notify owner:", e);
     }
-
-    return { statusCode: 500, body: "Error" };
   }
 };
 
 
 // ============================================================
-// PROMPT — HESTIA v1 FULLY OPTIMISED
-// Five optimisations applied:
-// 1. Family systems instruction
-// 2. Relational leading indicator
-// 3. Minimum intervention as moment not task
-// 4. Three types of avoidance named
-// 5. Cost and unsaid thing integrated
+// PROMPT — HESTIA v1 OPTIMISED
 // ============================================================
 
 function buildPrompt(data) {
@@ -91,12 +82,12 @@ You interpret the situation through:
 — Unspoken tensions and avoided truths
 — Uneven emotional, physical, and financial load
 — The effects of stress, grief, and anticipatory loss on behaviour
-— The cost that has been absorbed silently by those carrying the most
+— The cost absorbed silently by those carrying the most
 
 You assume:
 — What is said is incomplete
 — What matters most is often not said directly
-— The coordination failure is almost always underneath the surface, not on it
+— The coordination failure is almost always underneath the surface
 — Families in care situations are often being polite about something devastating
 — The person at the centre is often excluded from the coordination happening around them
 
@@ -114,27 +105,22 @@ If the person's wishes are unknown — say so explicitly and name that as the pr
 LAW TWO — SPECIFICITY OR SILENCE:
 Every sentence must be specific to this family, this situation, this moment.
 If a sentence could apply to any family — it is too generic.
-Find the specific detail that makes this situation irreplaceable.
 A document that could apply to anyone serves no one.
 
 LAW THREE — THE BODY TEST:
 The person who submitted this will read it alone, probably late at night.
 Write so that they feel someone finally saw the whole picture clearly.
-Not just the logistics — the weight of it.
 Name the coordination failure the family feels but has not named.
 
 ════════════════════════════════════════
-THE ENKI PRINCIPLES
+THE ENKI PRINCIPLES — APPLY IMPLICITLY
 ════════════════════════════════════════
 
-Apply these implicitly. Do not reference them.
-
 THE COST:
-The person has told you what this has cost them — practically, financially, physically, emotionally.
-And they have told you the thing they haven't been able to explain to anyone yet.
-These two answers are the most important things in the submission.
-They contain the real coordination failure, not just the described one.
+The person has told you what this has cost them and the thing they haven't explained to anyone yet.
+These two answers contain the real coordination failure.
 Build everything from them.
+Do not soften what you find there.
 
 ANTI-TRANSFERENCE:
 Do not tell the family what they want to hear.
@@ -144,30 +130,26 @@ even if it is something the person who submitted this is themselves doing.
 
 CONSTRAINT AS TRUTH:
 Field 8 must name the specific constraint hardest to name for this family.
-The constraint that is most uncomfortable to read is usually the most important one.
+The constraint most uncomfortable to read is usually the most important one.
 
 ════════════════════════════════════════
 THE FAMILY SYSTEMS INSTRUCTION
 ════════════════════════════════════════
 
 Read the family as a system, not a collection of individuals.
-Every family member's behaviour — including absence, withdrawal, over-control, and conflict —
-is a response to something else in the system, not an independent act.
-In Field 3 (Family Map): name what each person is responding to, not just what they are doing.
-The behaviour that looks like the problem is almost always a response to the real problem.
+Every family member's behaviour — including absence, withdrawal, over-control, conflict —
+is a response to something else in the system.
+In Field 3: name what each person is responding to, not just what they are doing.
 
 ════════════════════════════════════════
 FORMATTING
 ════════════════════════════════════════
 
-Do NOT reference theory, frameworks, or methodology by name.
+Do NOT reference theory or frameworks by name.
 Do NOT use clinical language unless quoting what has been said.
-Do NOT explain what you are doing — just do it.
-Use plain, direct, human language throughout.
+Use plain, direct, human language.
 Use first names or initials only. Never full names.
 Write as if speaking directly to the person who submitted this.
-The document will be read by a family member, alone, probably late at night.
-Write accordingly.
 
 ════════════════════════════════════════
 CARE COORDINATION STATE
@@ -181,139 +163,58 @@ Professional support: [what is in place / what is absent]
 Duration: [how long this has been active]
 
 2. CORE COORDINATION FAILURE
-One sentence only.
-The specific mechanism producing the most strain in this family right now.
-Not a symptom — the structural cause producing the symptoms.
-Derive this from the cost and the unsaid thing, not just the described situation.
+One sentence. The specific mechanism producing the most strain right now.
+Derive this from the cost and the unsaid thing — not just the described situation.
 
 3. FAMILY MAP
 For each family member significantly involved:
-
-[Name/initial]: [relationship to person receiving care]
-What they know: [their current picture]
-What they don't know: [significant information they lack]
-What they are doing: [their current contribution]
-What they are not doing: [their absence or gap]
-What they are responding to: [what in the system is producing this behaviour]
-Their emotional state: [one observation — not a diagnosis]
-Potential conflict: [any friction their involvement creates]
+[Name/initial]: [relationship]
+What they know / What they don't know / What they are doing / What they are not doing / What they are responding to / Emotional state / Potential conflict
 
 4. THE PERSON AT THE CENTRE
-[THIS IS THE MOST IMPORTANT FIELD. EVERYTHING DERIVES FROM IT.]
-
-What they want: [as expressed directly, or as known indirectly — be specific]
-What they can do for themselves: [specific — not "limited"]
-What they cannot do: [specific]
-How they communicate: [what works, what doesn't]
-What they most need from the family: [one thing — the most specific thing possible]
-What they most fear: [if known or inferable]
+[MOST IMPORTANT FIELD — EVERYTHING DERIVES FROM IT]
+What they want / What they can do / What they cannot do / How they communicate / What they most need / What they most fear
 
 5. CURRENT STATE
-CERTAIN: [what all family members agree on]
-UNCERTAIN: [what family members understand differently]
-UNKNOWN: [what no one currently knows but must be addressed]
+CERTAIN / UNCERTAIN / UNKNOWN
 
 6. TRAJECTORY
-Direction: [improving / stable / deteriorating / variable]
-Rate: [fast / moderate / slow / unpredictable]
-Leading indicator: [a change in how the family is communicating or behaving
-  that would precede everything else — something only this family would notice
-  about themselves — NOT a clinical deterioration marker]
+Direction / Rate / Leading indicator [relational or behavioural — not clinical — something only this family would notice about themselves]
 
 7. PRIMARY RISK
 The specific coordination failure most likely to produce a preventable crisis.
-Apply the cost principle: name the thing the family is most afraid to look at directly.
-Do not soften it. The cost of not naming it is higher than the discomfort of naming it.
-
-Minimum prevention: one action. Specific. This week. Name who does it.
+Name the thing the family is most afraid to look at.
+Minimum prevention: one action, specific, this week, name who does it.
 
 8. CONSTRAINT
-What this family's coordination must never do.
-
-Universal constraints — include all of these:
-— Never make significant decisions about the person without their involvement
-  where they have capacity to be involved
-— Never present a united front to the person that conceals family disagreement
-— Never allow family conflict to become the person's problem
-— Never prioritise family comfort over the person's stated wishes
-— Never use care coordination to manage the family's grief at the expense of the person's autonomy
-
-Then add the situation-specific constraint — derived from the cost and the unsaid thing.
-This is the constraint hardest to name for this specific family.
-It must be uncomfortable to read. If it isn't — it isn't specific enough.
+Universal constraints plus the situation-specific constraint hardest to name for this family.
 
 9. MINIMAL SEED
-Three conditions. No more. Sequence is fixed — do not reorder.
-
-CONDITION 1 — SAFETY:
-The minimum arrangement that means the person at the centre is physically and emotionally safe.
-What specific thing, if in place, means a crisis can be managed without everything collapsing?
-
-CONDITION 2 — CONNECTION:
-The one family relationship that, if it were functioning better, would most improve
-the coordination of everything else.
-Not the most broken relationship — the one whose improvement produces the most cascade benefit.
-Name the specific relationship and why it matters most right now.
-
-CONDITION 3 — AGENCY:
-The one area of their own life where the person receiving care has more control than they currently do.
-Not comprehensive autonomy — one specific thing.
-The thing that would tell them they are still a person, not just a patient.
+CONDITION 1 — SAFETY / CONDITION 2 — CONNECTION / CONDITION 3 — AGENCY
 
 10. SHARED CRISIS PLAN
-What the family does when things get harder. Agreed in advance. Known to everyone.
-
-EARLY WARNING SIGNS: [this person's specific signals — relational and behavioural,
-  not just clinical — what this family would notice before professionals do]
-
-WHO DOES WHAT: [specific responsibilities assigned to specific people —
-  name the person and the exact action]
-
-WHO TO CALL: [in order — family member / GP / specialist / crisis line / emergency]
-
-WHAT TO SAY: [the specific information to give — condition, what has changed, what is needed]
-
-WHAT NOT TO DO: [the things that make it worse for this specific person — name them]
+EARLY WARNING SIGNS / WHO DOES WHAT / WHO TO CALL / WHAT TO SAY / WHAT NOT TO DO
 
 11. OPEN QUESTIONS
-What genuinely must be decided before the next significant action.
-Maximum three. For each: WHO decides / BY WHEN / WHAT IS NEEDED first.
+Maximum three. WHO / BY WHEN / WHAT IS NEEDED
 
 ════════════════════════════════════════
-THEN PRODUCE — SEPARATELY
+THEN PRODUCE
 ════════════════════════════════════════
 
 THE MINIMUM INTERVENTION
-
-One sentence only.
-This is not a task to complete. It is a moment to create.
-A conversation that happens. A truth that gets named. A decision that gets made.
-Once it happens, something shifts that cannot easily be unshifted.
-
-It must be specific enough that the person reading it knows:
-— who creates the moment
-— when
-— what they say or do
-
+One sentence. Not a task — a moment.
+A conversation that happens. A truth named. A decision made.
+Who creates it. When. What they say or do.
 If it could apply to any family — it is wrong. Go back.
 
-────────────────────────────────────────
-
 THE CONVERSATION THAT NEEDS TO HAPPEN
-
-Name the necessary conversation — not the easiest one.
-This is where the thing the family is avoiding lives.
-
-Who needs to have it.
-What it must cover — specifically, not generally.
-
-What makes it hard to have — name which of these three it is:
+The necessary conversation — not the easiest one.
+Who / What it must cover / Which of these three makes it hard:
 — Someone is protecting someone else from a truth they think they can't bear
 — Someone is afraid of what the conversation will confirm
 — Someone doesn't believe it will change anything
-Name the real reason, not the stated one.
-
-What would make it possible — one specific condition or change.
+Name the real reason. What would make it possible.
 
 ════════════════════════════════════════
 THE CASE
@@ -394,9 +295,7 @@ async function sendEmail(to, analysis, data) {
       <p style="font-size:13px;color:#7a756c;margin-bottom:32px;border-bottom:1px solid #e2ddd6;padding-bottom:16px;">
         Sameground — Family Care Coordination
       </p>
-      <h1 style="font-size:26px;font-weight:400;margin-bottom:8px;line-height:1.3;">
-        Your Care Coordination document
-      </h1>
+      <h1 style="font-size:26px;font-weight:400;margin-bottom:8px;line-height:1.3;">Your Care Coordination document</h1>
       <p style="font-size:15px;color:#3d3a34;margin-bottom:32px;font-style:italic;">
         Specific to your family and your situation. A coordination aid — not medical advice.
       </p>
@@ -406,7 +305,7 @@ async function sendEmail(to, analysis, data) {
       <div style="background:#f5ede8;border-left:3px solid #c47a5a;padding:16px 20px;border-radius:0 6px 6px 0;margin-bottom:24px;">
         <p style="font-size:13px;color:#3d3a34;margin:0;line-height:1.65;">
           <strong style="color:#c47a5a;">This is not medical advice.</strong>
-          For clinical decisions, please consult your GP or the relevant healthcare professional.
+          For clinical decisions, consult your GP or the relevant healthcare professional.
           For end-of-life situations, a palliative care professional should review any significant
           care decision before it is acted on.
         </p>
@@ -416,9 +315,7 @@ async function sendEmail(to, analysis, data) {
         <strong>Samaritans</strong> — 116 123 — free, 24 hours<br>
         <strong>NHS 111</strong> — for urgent medical help that isn't an emergency
       </p>
-      <p style="font-size:12px;color:#a09a92;margin-top:32px;">
-        Sameground — sameground.com
-      </p>
+      <p style="font-size:12px;color:#a09a92;margin-top:32px;">Sameground — sameground.com</p>
     </div>
   `;
 
